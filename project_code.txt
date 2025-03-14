@@ -1,0 +1,21 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+df = pd.read_excel('/content/project.xlsx')
+df.info()
+df.head()
+most_borrowed_books = df.groupby('Book Title').size().reset_index(name='Borrow Count')
+most_borrowed_books = most_borrowed_books.sort_values(by='Borrow Count', ascending=False)
+plt.figure(figsize=(10, 6))
+sns.barplot(x='Borrow Count', y='Book Title', data=most_borrowed_books.head(10))
+plt.title('Top 10 Most Borrowed Books')
+plt.xlabel('Borrow Count')
+plt.ylabel('Book Title')
+plt.show()
+age_group_analysis = df.groupby(['Age Group', 'Book Title']).size().reset_index(name='Borrow Count')
+age_group_pivot = age_group_analysis.pivot(index='Age Group', columns='Book Title', values='Borrow Count').fillna(0)
+age_group_pivot.plot(kind='bar', stacked=True, figsize=(12, 8))
+plt.title('Borrowing Preferences by Age Group')
+plt.ylabel('Borrow Count')
+plt.xlabel('Age Group')
+plt.show()
